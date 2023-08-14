@@ -19,7 +19,7 @@ public:
         out.open(file_out);
         in.open(file_in);
         in >> cicle;
-        Adress adress[cicle];
+        Adress* adress = new Adress[cicle];
         for (int i = 0; i < cicle; i++) {
             in >> adress[i].city;
             in >> adress[i].street;
@@ -27,34 +27,42 @@ public:
             in >> adress[i].number_flat;
         }
 
-        Adress adress1[cicle];
-        std::copy_n(adress, cicle, adress1);
-        int rise[cicle];
-        int count = 0;
-        for(int k = 0; k < cicle; k++) {
-            rise[k] = k;
-            for (int i = 0; i < cicle; i++) {
-                if (adress1[rise[k]].city > adress1[i].city) {
-                    rise[k] = i;
-                    i = 0;
-                    count++;
-                }else if(i == cicle - 1 && count == 0){
-                    rise[k] = k;
+        std::string change;
+        int number_change;
+        for(int k = 0; k < cicle - 1; k++) {
+            for (int i = 0; i < cicle - 1; i++) {
+                if (adress[i].city > adress[i + 1].city) {
+
+                    change = adress[i].city;
+                    adress[i].city = adress[i + 1].city;
+                    adress[i + 1].city = change;
+
+                    change = adress[i].street;
+                    adress[i].street = adress[i + 1].street;
+                    adress[i + 1].street = change;
+
+                    number_change = adress[i].number_house;
+                    adress[i].number_house = adress[i + 1].number_house;
+                    adress[i + 1].number_house = number_change;
+
+                    number_change = adress[i].number_flat;
+                    adress[i].number_flat = adress[i + 1].number_flat;
+                    adress[i + 1].number_flat = number_change;
                 }
+
             }
-            adress1[rise[k]].city = "аааааа";
-            count = 0;
         }
 
         out  << cicle << "\n";
         for(int i = 0; i <cicle; i++){
-            out << adress[rise[i]].city << ", ";
-            out << adress[rise[i]].street << ", ";
-            out << adress[rise[i]].number_house << ", ";
-            out << adress[rise[i]].number_flat << "\n";
+            out << adress[i].city << ", ";
+            out << adress[i].street << ", ";
+            out << adress[i].number_house << ", ";
+            out << adress[i].number_flat << "\n";
         }
         out.close();
         in.close();
+        delete[] adress;
     }
 
 };
